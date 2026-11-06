@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Mobile viewport: no user zoom, draw under the notch (we pad with safe-area insets) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#7c3aed">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nova Quest">
+  <meta name="description" content="Nova's Quest – a joyful learning adventure for kids aged 6 to 10.">
+  <title>Nova's Quest</title>
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- The 9:16 game container. Everything lives inside #app. -->
+  <div id="app" aria-live="polite">
+    <div id="screens"></div>
+    <canvas id="fx" aria-hidden="true"></canvas>
+    <div id="modal-root"></div>
+  </div>
+
+  <!-- Shown by CSS when a phone is turned sideways -->
+  <div id="rotate" role="alert">
+    <div id="rotate-mascot"></div>
+    <p>Please turn your phone<br>the other way! 📱</p>
+  </div>
+
+  <noscript><p style="font:20px sans-serif;text-align:center;padding:40px">Please turn on JavaScript to play Nova's Quest.</p></noscript>
+
+  <!-- Plain scripts (not ES modules) so the game also works from file:// -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/mascot.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

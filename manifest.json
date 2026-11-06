@@ -1,0 +1,15 @@
+{
+  "name": "Nova's Quest – Learning Adventure",
+  "short_name": "Nova Quest",
+  "description": "A joyful learning game for kids aged 6–10. 50 levels, works offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#b69cff",
+  "theme_color": "#7c3aed",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
