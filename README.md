@@ -6,7 +6,7 @@ No frameworks, no build step, no network requests, no ads, no tracking.
 - 5 worlds × 10 levels = **50 levels** (every 5th level is a 15-question 🏆 TEST)
 - 8 question types: multiple choice, true/false, counting, patterns, drag-to-order, match pairs, memory flip, and a number pad
 - Nova the star mascot (inline SVG) gives hints, explains mistakes and celebrates wins
-- Coins, stars, 55 stickers, 16 badges, a dressing room with 17 items, and a daily gift
+- Coins, stars, 55 stickers, 16 badges, a dressing room with 29 items, and a daily gift
 - Sounds and music are generated in code (Web Audio), with an optional 🔊 read-aloud button
 - Saves progress on the device (`localStorage` key `kidsquest_save_v1`) and works offline as a PWA
 
