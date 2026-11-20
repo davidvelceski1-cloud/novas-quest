@@ -10,6 +10,45 @@
   let ctx = null, master = null, sfxBus = null, musicBus = null;
   let musicOn = false, musicTimer = null, nextNoteTime = 0, step = 0;
 
+  /* ---------------- Phone audio fixes ----------------
+     1. iPhones mute Web Audio when the ring/silent switch is on silent.
+        Asking for a "playback" audio session (iOS 17+) makes it behave like
+        a video and play anyway. Older iOS needs a looping silent <audio>
+        element to switch the session over.
+     2. Mobile browsers only unlock audio on touchend/click (not on a
+        finger's pointerdown), so init() is called from those events too.
+     3. iOS can leave the context "interrupted" (calls, Siri, app switch),
+        so we resume whenever it isn't "running". */
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  let silentEl = null;
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* ignore */ }
+
+  function silentWavURL() {
+    const n = 4410, buf = new ArrayBuffer(44 + n), v = new DataView(buf); // 0.1 s, 8-bit mono, 44.1 kHz
+    const str = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    str(0, 'RIFF'); v.setUint32(4, 36 + n, true); str(8, 'WAVEfmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 44100, true); v.setUint32(28, 44100, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+    str(36, 'data'); v.setUint32(40, n, true);
+    for (let i = 0; i < n; i++) v.setUint8(44 + i, 128);
+    return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+  }
+  /** Older iOS only: keep a silent clip looping so sounds ignore the silent switch. */
+  function iosSessionKeepAlive(on) {
+    if (!isIOS || navigator.audioSession) return;
+    try {
+      if (on) {
+        if (!silentEl) {
+          silentEl = document.createElement('audio');
+          silentEl.src = silentWavURL(); silentEl.loop = true;
+          silentEl.setAttribute('playsinline', ''); silentEl.setAttribute('x-webkit-airplay', 'deny');
+        }
+        if (silentEl.paused) { const p = silentEl.play(); if (p && p.catch) p.catch(() => {}); }
+      } else if (silentEl) silentEl.pause();
+    } catch (e) { /* ignore */ }
+  }
+
   /** Create / resume the AudioContext. Call from a user gesture. */
   function init() {
     try {
@@ -21,10 +60,18 @@
         sfxBus = ctx.createGain(); sfxBus.gain.value = 0.6; sfxBus.connect(master);
         musicBus = ctx.createGain(); musicBus.gain.value = 0.16; musicBus.connect(master);
       }
-      if (ctx.state === 'suspended') ctx.resume();
+      if (ctx.state !== 'running') {
+        const p = ctx.resume(); if (p && p.catch) p.catch(() => {});
+        // A 1-sample silent buffer played inside the tap fully unlocks older WebKit.
+        const b = ctx.createBufferSource(); b.buffer = ctx.createBuffer(1, 1, 22050);
+        b.connect(ctx.destination); b.start(0);
+      }
+      if (document.visibilityState !== 'hidden') iosSessionKeepAlive(true);
       if (musicOn && !musicTimer) startMusic();
     } catch (e) { ctx = null; }
   }
+  /** Call when the app is hidden: lets iOS release the audio session. */
+  function sleep() { iosSessionKeepAlive(false); }
 
   const sfxEnabled = () => KQ.State && KQ.State.data.settings.sfx;
 
@@ -140,5 +187,5 @@
   }
   function stopSpeaking() { if (canSpeak) try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } }
 
-  KQ.Audio = { init, play, setMusic, speak, stopSpeaking, canSpeak, clean };
+  KQ.Audio = { init, sleep, play, setMusic, speak, stopSpeaking, canSpeak, clean };
 })();

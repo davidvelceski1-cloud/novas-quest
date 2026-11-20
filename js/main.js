@@ -718,10 +718,12 @@
     FX.setup();
     $('#rotate-mascot').innerHTML = M.svg({ expr: 'wave' });
 
-    // First tap anywhere unlocks audio (browser rule); also give haptic taps.
+    // Taps unlock audio (browser rule). Phones only count touchend/click as a
+    // real gesture, not a finger's pointerdown, so listen to all of them.
+    const unlockAudio = () => { A.init(); if (S.data.settings.music) A.setMusic(true); };
+    ['pointerdown', 'touchend', 'click', 'keydown'].forEach((t) =>
+      document.addEventListener(t, unlockAudio, { capture: true, passive: true }));
     document.addEventListener('pointerdown', (e) => {
-      A.init();
-      if (S.data.settings.music) A.setMusic(true);
       if (e.target.closest && e.target.closest('.btn, .ans, .node, .tile, .mcard')) FX.haptic(8);
     }, { passive: true });
     // No pinch / double-tap zoom, no long-press menu on game elements.
@@ -730,7 +732,7 @@
     document.addEventListener('contextmenu', (e) => { if (!e.target.closest('input')) e.preventDefault(); });
     // Pause music when the app is hidden.
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) { A.setMusic(false); A.stopSpeaking(); } else if (S.data.settings.music) A.setMusic(true);
+      if (document.hidden) { A.setMusic(false); A.stopSpeaking(); A.sleep(); } else { A.init(); if (S.data.settings.music) A.setMusic(true); }
     });
 
     // PWA manifest + offline support (only over http/https; file:// would log CORS errors).

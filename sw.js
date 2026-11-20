@@ -1,6 +1,6 @@
 /* sw.js – offline support. Caches every game file on first visit,
    then serves from cache (cache-first). Bump VERSION after changing files. */
-const VERSION = 'kidsquest-v2';
+const VERSION = 'kidsquest-v3';
 const FILES = [
   './', './index.html', './manifest.json', './css/style.css',
   './js/state.js', './js/audio.js', './js/effects.js', './js/mascot.js',
