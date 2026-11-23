@@ -3,6 +3,21 @@
 A joyful learning game for children aged 6–10, built with plain HTML, CSS and JavaScript.
 No frameworks, no build step, no network requests, no ads, no tracking.
 
+**▶ Play it now: [novas-quest.vercel.app](https://novas-quest.vercel.app)** (best on a phone, and you can add it to your home screen)
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/title.png" width="230" alt="Title screen with Nova wearing a unicorn horn and heart glasses"><br><sub>Title screen</sub></td>
+    <td align="center"><img src="docs/screenshots/map.png" width="230" alt="World map with the level path"><br><sub>World map</sub></td>
+    <td align="center"><img src="docs/screenshots/question.png" width="230" alt="Picture question: which animal can fly?"><br><sub>Picture questions</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/number-pad.png" width="230" alt="Number pad question: 9 times 8"><br><sub>Number pad for maths</sub></td>
+    <td align="center"><img src="docs/screenshots/results.png" width="230" alt="Perfect score with three stars"><br><sub>Stars and coins</sub></td>
+    <td align="center"><img src="docs/screenshots/dressing-room.png" width="230" alt="Dressing room showing hats for Nova"><br><sub>Dress up Nova</sub></td>
+  </tr>
+</table>
+
 - 5 worlds × 10 levels = **50 levels** (every 5th level is a 15-question 🏆 TEST)
 - 8 question types: multiple choice, true/false, counting, patterns, drag-to-order, match pairs, memory flip, and a number pad
 - Nova the star mascot (inline SVG) gives hints, explains mistakes and celebrates wins
